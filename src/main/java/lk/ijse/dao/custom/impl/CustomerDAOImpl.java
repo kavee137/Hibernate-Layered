@@ -8,7 +8,6 @@ import org.hibernate.Transaction;
 import org.hibernate.query.NativeQuery;
 import org.hibernate.query.Query;
 
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +32,6 @@ public class CustomerDAOImpl implements CustomerDAO {
         }
     }
 
-
     @Override
     public boolean add(Customer customer) throws SQLException, ClassNotFoundException {
         Session session = SessionFactoryConfiguration.getInstance().getSession();
@@ -44,7 +42,6 @@ public class CustomerDAOImpl implements CustomerDAO {
         session.close();
         return true;
     }
-
 
     @Override
     public boolean update(Customer customer) throws SQLException, ClassNotFoundException {
@@ -97,6 +94,24 @@ public class CustomerDAOImpl implements CustomerDAO {
 
     @Override
     public Customer search(Object... args) throws SQLException, ClassNotFoundException {
-        return null;
+        Session session = SessionFactoryConfiguration.getInstance().getSession();
+
+        try {
+            // HQL query to search customer by id
+            String hql = "FROM Customer c WHERE c.id = :id";
+            Query<Customer> query = session.createQuery(hql, Customer.class);
+
+            // Set the id parameter from args
+            query.setParameter("id", args[0].toString());
+
+            // Execute query and get single result or return null if no result
+            Customer customer = query.uniqueResult();
+
+            return customer; // Return the found customer or null if not found
+
+        } finally {
+            session.close(); // Always close the session
+        }
     }
+
 }

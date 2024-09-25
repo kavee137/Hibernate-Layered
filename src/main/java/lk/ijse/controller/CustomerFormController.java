@@ -8,6 +8,7 @@ import javafx.scene.layout.AnchorPane;
 import lk.ijse.bo.BOFactory;
 import lk.ijse.bo.custom.CustomerBO;
 import lk.ijse.dto.CustomerDTO;
+import lk.ijse.entity.Customer;
 import lk.ijse.view.tdm.CustomerTm;
 
 import java.sql.SQLException;
@@ -182,6 +183,21 @@ public class CustomerFormController {
             }
         } catch (SQLException | ClassNotFoundException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
+        }
+    }
+
+    public void btnSearchOnAction(ActionEvent actionEvent) throws SQLException, ClassNotFoundException {
+        int id = Integer.parseInt(txtID.getText());
+        Customer customer = customerBO.customerSearch(id);
+
+        if (customer != null) {
+            txtID.setText(String.valueOf(customer.getId()));
+            txtName.setText(customer.getName());
+            txtAddress.setText(customer.getAddress());
+            txtPhoneNumber.setText(customer.getPhoneNumber());
+            txtAge.setText(String.valueOf(customer.getAge()));
+        } else {
+            new Alert(Alert.AlertType.INFORMATION, "customer not found!").show();
         }
     }
 }

@@ -44,4 +44,8 @@ public class CustomerBOImpl implements CustomerBO {
         return allCustomers;
     }
 
+    @Override
+    public Customer customerSearch(int id) throws SQLException, ClassNotFoundException {
+        return customerDAO.search(id);
+    }
 }

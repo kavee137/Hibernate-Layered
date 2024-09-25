@@ -2,6 +2,7 @@ package lk.ijse.bo.custom;
 
 import lk.ijse.bo.SuperBO;
 import lk.ijse.dto.CustomerDTO;
+import lk.ijse.entity.Customer;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -16,4 +17,6 @@ public interface CustomerBO extends SuperBO {
     public int generateNewCustomerID() throws SQLException, ClassNotFoundException;
 
     public ArrayList<CustomerDTO> getAllCustomers() throws SQLException, ClassNotFoundException;
+
+    Customer customerSearch(int id) throws SQLException, ClassNotFoundException;
 }

@@ -17,4 +17,12 @@ public class CustomerDTO {
     private String phoneNumber;
     private String address;
     private int age;
+
+    public CustomerDTO(int id, String address, int age, String name, String phoneNumber) {
+        this.id = id;
+        this.address = address;
+        this.age = age;
+        this.name = name;
+        this.phoneNumber = phoneNumber;
+    }
 }

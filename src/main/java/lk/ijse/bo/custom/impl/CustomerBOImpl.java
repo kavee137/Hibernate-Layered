@@ -7,6 +7,7 @@ import lk.ijse.dto.CustomerDTO;
 import lk.ijse.entity.Customer;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class CustomerBOImpl implements CustomerBO {
 
@@ -25,6 +26,22 @@ public class CustomerBOImpl implements CustomerBO {
     @Override
     public boolean updateCustomer(CustomerDTO dto) throws SQLException, ClassNotFoundException {
         return customerDAO.update(new Customer(dto.getId(), dto.getName(), dto.getAddress(), dto.getAge(), dto.getPhoneNumber()));
+    }
+
+    @Override
+    public int generateNewCustomerID() throws SQLException, ClassNotFoundException {
+        return customerDAO.generateNewID();
+    }
+
+    @Override
+    public ArrayList<CustomerDTO> getAllCustomers() throws SQLException, ClassNotFoundException {
+        ArrayList<CustomerDTO> allCustomers = new ArrayList<>();
+
+        ArrayList<Customer> all = customerDAO.getAll();
+        for (Customer c : all) {
+            allCustomers.add(new CustomerDTO(c.getId(),c.getAddress(), c.getAge(), c.getName(), c.getPhoneNumber()));
+        }
+        return allCustomers;
     }
 
 }

@@ -6,15 +6,33 @@ import lk.ijse.entity.Customer;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.NativeQuery;
+import org.hibernate.query.Query;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class CustomerDAOImpl implements CustomerDAO {
     @Override
     public ArrayList<Customer> getAll() throws SQLException, ClassNotFoundException {
-        return null;
+        Session session = SessionFactoryConfiguration.getInstance().getSession();
+
+        try {
+            // HQL query to fetch all customers
+            Query<Customer> query = session.createQuery("FROM Customer", Customer.class);
+
+            // Fetch result list from query
+            List<Customer> customerList = query.list();
+
+            // Convert List to ArrayList (if needed)
+            return new ArrayList<>(customerList);
+
+        } finally {
+            session.close(); // Always close the session after use
+        }
     }
+
 
     @Override
     public boolean add(Customer customer) throws SQLException, ClassNotFoundException {
@@ -44,8 +62,24 @@ public class CustomerDAOImpl implements CustomerDAO {
     }
 
     @Override
-    public String generateNewID() throws SQLException, ClassNotFoundException {
-        return "";
+    public int generateNewID() throws SQLException, ClassNotFoundException {
+        Session session = SessionFactoryConfiguration.getInstance().getSession();
+
+        try {
+            // HQL query to fetch the latest customer id
+            Query<Integer> query = session.createQuery("SELECT c.id FROM Customer c ORDER BY c.id DESC", int.class);
+            query.setMaxResults(1); // Limit to get only the latest result
+
+            int lastId = query.uniqueResult(); // Fetch the last customerID
+
+            if (lastId != 0) {
+                return lastId + 1;
+            } else {
+                return 1;
+            }
+        } finally {
+            session.close();
+        }
     }
 
     @Override
